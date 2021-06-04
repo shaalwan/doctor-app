@@ -15,5 +15,6 @@ urlpatterns = [
 
     # home screen
     path('patients', patientList.as_view({'get': 'list'}), name='patients-list'),
-    path('reports/<int:pk>',ReportList.as_view({'get':'list'}),name = 'report-list')
+    path('reports/<int:pk>',ReportList.as_view({'get':'list'}),name = 'report-list'),
+    path('prescriptions/<int:pk>',PrescriptionList.as_view({'get':'list'}), name='prescription-list'),
 ]

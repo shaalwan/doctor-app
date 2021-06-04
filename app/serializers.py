@@ -1,4 +1,5 @@
 from django.db.models import fields
+from django.db.models.query import prefetch_related_objects
 from rest_framework import serializers
 from .models import *
 from rest_framework.validators import UniqueValidator
@@ -57,8 +58,12 @@ class AddDoctor(serializers.ModelSerializer):
 
 
 class ReportSerializer(serializers.ModelSerializer):
-    patient = PatientSerializer()
-
     class Meta:
         model = Report
-        fields = ['patient', 'data', 'date']
+        fields = [ 'patient', 'date','data']
+
+class PrescriptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Prescription
+        fields = ['patient','date','details']

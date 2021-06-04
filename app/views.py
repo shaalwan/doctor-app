@@ -164,5 +164,15 @@ class ReportList(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
 
     def get_queryset(self):
-        reports = Report.objects.filter(patient = self.kwargs['pk']).order_by('date')
+        reports = Report.objects.filter(patient = self.kwargs['pk']).order_by('-date')
         return reports
+
+class PrescriptionList(viewsets.ReadOnlyModelViewSet):
+    model = Prescription
+    serializer_class = PrescriptionSerializer
+    #pagination_class = StandardResultsSetPagination
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter]
+
+    def get_queryset(self):
+        Prescriptions = Prescription.objects.filter(patient = self.kwargs['pk']).order_by('-date')
+        return Prescriptions
