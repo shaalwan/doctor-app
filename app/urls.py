@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from .views import *
 
 urlpatterns = [
@@ -26,4 +28,4 @@ urlpatterns = [
     path('report/add',newReportViewset.as_view(),name='new-report'),
     path('xray/add',newXrayViewset.as_view(),name='new-Xray'),
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
