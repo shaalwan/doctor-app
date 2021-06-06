@@ -21,13 +21,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'password', 'email',
                   'phone_number', 'is_doctor', 'is_patient']
 
-
 class AddUser(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'name', 'phone_number',
                   'address', 'email', 'image', 'age']
-
 
 class PatientSerializer(serializers.ModelSerializer):
     user = UserSerializer()
@@ -36,12 +34,10 @@ class PatientSerializer(serializers.ModelSerializer):
         model = Patient
         fields = ['user', 'doctor', 'problem']
 
-
 class AddPatient(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = '__all__'
-
 
 class DoctorSerializer(serializers.ModelSerializer):
     user = UserSerializer()
@@ -50,20 +46,28 @@ class DoctorSerializer(serializers.ModelSerializer):
         model = Doctor
         fields = ['user', 'department']
 
-
 class AddDoctor(serializers.ModelSerializer):
     class Meta:
         model = Doctor
         fields = '__all__'
 
-
 class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
-        fields = [ 'patient', 'date','data']
+        fields = '__all__'
 
 class PrescriptionSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Prescription
-        fields = ['patient','date','details']
+        fields = '__all__'
+
+class XraySerializer(serializers.ModelSerializer):
+    report = ReportSerializer()
+    class Meta:
+        model = Xray
+        fields = ['patient','pic_id','image','time','category','report']
+
+class addXray(serializers.ModelSerializer):
+    class Meta:
+        model = Xray
+        fields = '__all__'
