@@ -140,6 +140,13 @@ class userViewset(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class DoctorList(viewsets.ReadOnlyModelViewSet):
+    model = Doctor
+    serializer_class=DoctorSerializer
+    def get_queryset(self):
+        doctors = Doctor.objects.filter(department__hospital = 1)
+        return doctors
+
 # home pages
 class patientList(viewsets.ReadOnlyModelViewSet):
     model = Patient

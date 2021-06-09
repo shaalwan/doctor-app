@@ -13,6 +13,7 @@ urlpatterns = [
     path('doctor/<int:pk>', doctorViewset.as_view(), name='doctor'),
     path('patient/<int:pk>', patientViewset.as_view(), name='patient'),
     path('user/<int:pk>', userViewset.as_view(), name='user'),
+    path('doctors',DoctorList.as_view({'get':'list'}),name='doctorslist'),
 
     # home screen doctor
     path('patients', patientList.as_view({'get': 'list'}), name='patients-list'),
