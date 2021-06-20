@@ -39,6 +39,7 @@ class registerDoctor(APIView):
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
+
 class registerPatient(APIView):
 
     def post(self, request, format=None):
@@ -59,6 +60,7 @@ class registerPatient(APIView):
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
+
 class login(APIView):
 
     def post(self, request, format=None):
@@ -72,6 +74,8 @@ class login(APIView):
         return Response({"Error": "invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 # user view,edit,delete
+
+
 class doctorViewset(APIView):
 
     def get_object(self, pk):
@@ -93,6 +97,7 @@ class doctorViewset(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class patientViewset(APIView):
 
     def get_object(self, pk):
@@ -113,6 +118,7 @@ class patientViewset(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class userViewset(APIView):
 
@@ -140,14 +146,18 @@ class userViewset(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class DoctorList(viewsets.ReadOnlyModelViewSet):
     model = Doctor
-    serializer_class=DoctorSerializer
+    serializer_class = DoctorSerializer
+
     def get_queryset(self):
-        doctors = Doctor.objects.filter(department__hospital = 1)
+        doctors = Doctor.objects.filter(department__hospital=1)
         return doctors
 
 # home pages
+
+
 class patientList(viewsets.ReadOnlyModelViewSet):
     model = Patient
     serializer_class = PatientSerializer
@@ -160,6 +170,7 @@ class patientList(viewsets.ReadOnlyModelViewSet):
             user=self.request.user)).order_by('user')
         return patients
 
+
 class ReportList(viewsets.ReadOnlyModelViewSet):
     model = Report
     serializer_class = ReportSerializer
@@ -170,6 +181,7 @@ class ReportList(viewsets.ReadOnlyModelViewSet):
         reports = Report.objects.filter(
             patient=self.kwargs['pk']).order_by('-date')
         return reports
+
 
 class PrescriptionList(viewsets.ReadOnlyModelViewSet):
     model = Prescription
@@ -182,6 +194,7 @@ class PrescriptionList(viewsets.ReadOnlyModelViewSet):
             patient=self.kwargs['pk']).order_by('-date')
         return Prescriptions
 
+
 class XrayList(viewsets.ReadOnlyModelViewSet):
     model = Xray
     serializer_class = XraySerializer
@@ -192,6 +205,7 @@ class XrayList(viewsets.ReadOnlyModelViewSet):
         xrays = Xray.objects.filter(
             patient=self.kwargs['pk']).order_by('-report__date')
         return xrays
+
 
 class XrayViewset(APIView):
     def get_object(self, pk):
@@ -218,13 +232,15 @@ class XrayViewset(APIView):
         xray.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class newXrayViewset(APIView):
-    def post(self,requests):
+    def post(self, requests):
         serializer = addXray(data=requests.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ReportViewset(APIView):
     def get_object(self, pk):
@@ -251,10 +267,30 @@ class ReportViewset(APIView):
         report.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class newReportViewset(APIView):
-    def post(self,requests):
+    def post(self, requests):
         serializer = ReportSerializer(data=requests.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class newAppointment(APIView):
+    def post(self, requests):
+        date = requests.data['date']
+        patient = requests.data['patient']
+        doctor = requests.user
+        data = {"date": date, "patient": patient, "doctor": doctor}
+        serializer = AppointmentSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, requests):
+        appointment = Appointment.objects.get(
+            date=requests.data['date'], patient=requests.data['patient'])
+        appointment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

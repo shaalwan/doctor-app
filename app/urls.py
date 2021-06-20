@@ -28,4 +28,6 @@ urlpatterns = [
     path('report/add',newReportViewset.as_view(),name='new-report'),
     path('xray/add',newXrayViewset.as_view(),name='new-Xray'),
 
+    path('getappointment',newAppointment.as_view(),name='new appointment')
+
 ]

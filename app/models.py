@@ -35,11 +35,17 @@ class Doctor(models.Model):
     def __str__(self):
         return self.user.username
 
+class Problem(models.Model):
+    problem = models.CharField(max_length=5000)
+    Department = models.ForeignKey(Department,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.problem
+
 class Patient(models.Model):
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-    problem = models.CharField(max_length=500)
+    problem = models.ForeignKey(Problem,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.username
@@ -61,3 +67,11 @@ class Xray(models.Model):
     category = models.CharField(max_length=500, null=True, blank=True)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE,default=None)
     report = models.ForeignKey(Report, on_delete=models.CASCADE,default=None)
+
+    def __str__(self):
+        return self.pic_id
+
+class Appointment(models.Model):
+    date = models.DateField(blank=True)
+    patient = models.ForeignKey(Patient,on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Doctor,on_delete=models.CASCADE)

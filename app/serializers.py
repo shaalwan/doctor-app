@@ -1,6 +1,7 @@
 from django.db.models import fields
 from django.db.models.query import prefetch_related_objects
 from rest_framework import serializers
+from rest_framework.compat import apply_markdown
 from .models import *
 from rest_framework.validators import UniqueValidator
 
@@ -70,4 +71,9 @@ class XraySerializer(serializers.ModelSerializer):
 class addXray(serializers.ModelSerializer):
     class Meta:
         model = Xray
+        fields = '__all__'
+
+class AppointmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appointment
         fields = '__all__'
