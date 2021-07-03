@@ -9,8 +9,7 @@ from rest_framework.validators import UniqueValidator
 class UserSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField()
-    username = serializers.CharField(required=True, validators=[
-                                     UniqueValidator(queryset=User.objects.all())])
+    username = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     password = serializers.CharField(min_length=8, write_only=True)
     email = serializers.EmailField(required=True)
     phone_number = serializers.CharField(max_length=10, write_only=True)
@@ -19,14 +18,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'email',
-                  'phone_number', 'is_doctor', 'is_patient']
+        fields = ['id', 'username', 'password', 'email', 'phone_number', 'is_doctor', 'is_patient']
 
 class AddUser(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'name', 'phone_number',
-                  'address', 'email', 'image', 'age']
+        fields = ['id', 'username', 'name', 'phone_number', 'address', 'email', 'image', 'age']
 
 class PatientSerializer(serializers.ModelSerializer):
     user = UserSerializer()
