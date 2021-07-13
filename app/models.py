@@ -45,7 +45,7 @@ class Problem(models.Model):
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-    problem = models.ForeignKey(Problem,on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem,on_delete=models.CASCADE,default=1)
 
     def __str__(self):
         return self.user.username
