@@ -16,6 +16,7 @@ urlpatterns = [
     path('doctors',DoctorList.as_view({'get':'list'}),name='doctorslist'),
 
     # home screen doctor
+    path('problems',ProblemList.as_view({'get':'list'}),name = 'problem-list'),
     path('patients', patientList.as_view({'get': 'list'}), name='patients-list'),
     #home screen patient + patient details doctor
     path('reports/<int:pk>',ReportList.as_view({'get':'list'}),name = 'report-list'),
@@ -29,5 +30,6 @@ urlpatterns = [
     path('xray/add',newXrayViewset.as_view(),name='new-Xray'),
 
     path('getappointment',newAppointment.as_view(),name='new appointment')
+    
 
 ]

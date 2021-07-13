@@ -75,3 +75,5 @@ class Appointment(models.Model):
     date = models.DateField(blank=True)
     patient = models.ForeignKey(Patient,on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor,on_delete=models.CASCADE)
+
+

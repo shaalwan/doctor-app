@@ -156,6 +156,14 @@ class DoctorList(viewsets.ReadOnlyModelViewSet):
         return doctors
 
 # home pages
+class ProblemList(viewsets.ReadOnlyModelViewSet):
+    model = Problem
+    serializer_class = ProblemSerializer
+    #pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+        Problems = Problem.objects.filter(Department=1)
+        return Problems
 
 
 class patientList(viewsets.ReadOnlyModelViewSet):
@@ -294,3 +302,5 @@ class newAppointment(APIView):
             date=requests.data['date'], patient=requests.data['patient'])
         appointment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
