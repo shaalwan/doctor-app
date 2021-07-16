@@ -1,4 +1,5 @@
 from django.db.models import fields
+from django.db.models.fields.files import ImageField
 from django.db.models.query import prefetch_related_objects
 from rest_framework import serializers
 from rest_framework.compat import apply_markdown
@@ -12,13 +13,13 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     password = serializers.CharField(min_length=8, write_only=True)
     email = serializers.EmailField(required=True)
-    phone_number = serializers.CharField(max_length=10, write_only=True)
+    phone_number = serializers.CharField(max_length=10)
     is_doctor = serializers.BooleanField(default=0)
     is_patient = serializers.BooleanField(default=0)
-
+    image = serializers.ImageField()
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'email', 'phone_number', 'is_doctor', 'is_patient']
+        fields = ['id', 'username', 'name','password', 'image','email', 'phone_number', 'is_doctor', 'is_patient']
 
 class AddUser(serializers.ModelSerializer):
     class Meta:
