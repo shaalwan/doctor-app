@@ -28,10 +28,12 @@ class registerDoctor(APIView):
         password = data['password']
         phone_number = data['contact']
         department = data['department']  # id of department
+        name = data['name']
 
         user = User.objects.create_user(username, email, password)
         user.is_doctor = True  # making this them a doctor
         user.phone_number = phone_number
+        user.name = name
         user.save()
         departmentObj = Department.objects.get(pk=department)
         doctor = Doctor(user=user, department=departmentObj)
@@ -191,6 +193,20 @@ class ReportList(viewsets.ReadOnlyModelViewSet):
         return reports
 
 
+# class AppointmentList(viewsets.ReadOnlyModelViewSet):
+#     model = Appointment
+#     serializer_class = AppointmentSerializer
+#     #pagination_class = StandardResultsSetPagination
+
+#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+
+    def get_queryset(self):
+        reports = Report.objects.filter(
+            patient=self.kwargs['pk']).order_by('-date')
+        return reports
+
+
+
 class PrescriptionList(viewsets.ReadOnlyModelViewSet):
     model = Prescription
     serializer_class = PrescriptionSerializer
@@ -279,6 +295,41 @@ class ReportViewset(APIView):
 class newReportViewset(APIView):
     def post(self, requests):
         serializer = ReportSerializer(data=requests.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PrescriptionViewset(APIView):
+    def get_object(self, pk):
+        try:
+            return Prescription.objects.get(pk=pk)
+        except Report.DoesNotExist():
+            raise Http404
+
+    def get(self, requests, pk):
+        report = self.get_object(pk)
+        serializer = PrescriptionSerializer(report)
+        return Response(serializer.data)
+
+    def put(self, requests, pk):
+        prescription = self.get_object(pk)
+        serializer = PrescriptionSerializer(prescription, data=requests.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, requests, pk):
+        report = self.get_object(pk)
+        report.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class newPrescriptionViewset(APIView):
+    def post(self, requests):
+        serializer = PrescriptionSerializer(data=requests.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
