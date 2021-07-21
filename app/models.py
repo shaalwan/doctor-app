@@ -64,6 +64,7 @@ class Xray(models.Model):
     pic_id = models.CharField(max_length=30,null=True)
     image = models.ImageField(upload_to='Xrays/', null=True)
     time = models.TimeField(null=True,blank=True)
+    date = models.DateField(null=True,blank=True)
     category = models.CharField(max_length=500, null=True, blank=True)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE,default=None)
     report = models.ForeignKey(Report, on_delete=models.CASCADE,default=None)
