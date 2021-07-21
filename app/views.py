@@ -52,13 +52,13 @@ class registerPatient(APIView):
         phone_number = data['contact']
         doctor = data['doctor']  # id of doctor
         name = data['name']
-
         user = User.objects.create_user(username, email, password)
         user.is_patient = True
         user.phone_number = phone_number
         user.name = name
         user.save()
         doctorObj = Doctor.objects.get(pk=doctor)
+        # problemObj = Problem.objects.get(pk=problem)
         patient = Patient(user=user, doctor=doctorObj)
         patient.save()
         serializer = UserSerializer(user)

@@ -64,7 +64,7 @@ class XraySerializer(serializers.ModelSerializer):
     report = ReportSerializer()
     class Meta:
         model = Xray
-        fields = ['patient','pic_id','image','time','category','report']
+        fields = ['patient','pic_id','image','time','date','category','report']
 
 class addXray(serializers.ModelSerializer):
     class Meta:
