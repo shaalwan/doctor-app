@@ -339,6 +339,17 @@ class newPrescriptionViewset(APIView):
 
 
 class newAppointment(APIView):
+
+    def get(self,requests):
+        user = requests.user
+        if user.is_doctor:
+            appoints = Appointment.objects.filter(doctor=user.id)
+        else:
+            appoints = Appointment.objects.filter(patient=user.id)
+        serializer = AppointmentSerializer(appoints,many=True)
+        return Response(serializer.data)
+
+
     def post(self, requests):
         date = requests.data['date']
         patient = requests.data['patient']
@@ -351,9 +362,7 @@ class newAppointment(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, requests):
-        appointment = Appointment.objects.get(
-            date=requests.data['date'], patient=requests.data['patient'])
+        appointment = Appointment.objects.get(pk=requests.data['id'])
         appointment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
 
