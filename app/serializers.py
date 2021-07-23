@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
     image = serializers.ImageField()
     class Meta:
         model = User
-        fields = ['id', 'username', 'name','password', 'image','email', 'phone_number', 'is_doctor', 'is_patient']
+        fields = ['id', 'username', 'name','password', 'age','state','image','email', 'phone_number', 'is_doctor', 'is_patient']
 
 class AddUser(serializers.ModelSerializer):
     class Meta:
