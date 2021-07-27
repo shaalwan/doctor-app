@@ -8,7 +8,7 @@ from rest_framework import status  # for response status
 from rest_framework import viewsets  # for viewsets.read-only viewsets
 # authenticating a user using username and password
 from django.contrib.auth import authenticate
-# to add filters in a readonly viewset
+# to add filters in a read only viewset
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters  # to add search filter in readonly viewset
 
