@@ -14,6 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
                                      UniqueValidator(queryset=User.objects.all())])
     password = serializers.CharField(min_length=8, write_only=True)
     email = serializers.EmailField(required=True)
+    phone_number = serializers.CharField(length=10)
     is_doctor = serializers.BooleanField(default=0)
     is_patient = serializers.BooleanField(default=0)
     image = serializers.ImageField()
@@ -21,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'name', 'password', 'age', 'state',
-                  'image', 'email','address' 'phone_number', 'is_doctor', 'is_patient']
+                  'image', 'email','address', 'phone_number', 'is_doctor', 'is_patient']
 
 
 class AddUser(serializers.ModelSerializer):
