@@ -63,15 +63,15 @@ ROOT_URLCONF = 'project.urls'
 
 FCM_SERVER_KEY="drxab-1fdea"
 
-REST_FRAMEWORK = {
-    #     'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework.authentication.TokenAuthentication',
+# REST_FRAMEWORK = {
+#     #     'DEFAULT_AUTHENTICATION_CLASSES': [
+#     #     'rest_framework.authentication.TokenAuthentication',
 
-    # ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ]
-}
+#     # ],
+#     # 'DEFAULT_PERMISSION_CLASSES': [
+#     #     'rest_framework.permissions.IsAuthenticated',
+#     ]
+# }
 
 TEMPLATES = [
     {
