@@ -31,7 +31,7 @@ urlpatterns = [
     path('xray/add',newXrayViewset.as_view(),name='new-Xray'),
     path('prescription/add',newPrescriptionViewset.as_view(),name='new-prescription'),
 
-    path('getappointment',Appointment.as_view(),name='new appointment'),
+    path('getappointment',AppointmentViewset.as_view(),name='new appointment'),
     path('askappointment',AskAppointment.as_view(),name='askappointment'),
     path('shareReport',Share.as_view(),name='shareReport'),
 ]

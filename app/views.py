@@ -376,7 +376,7 @@ class AskAppointment(APIView):#url yet to test
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class Appointment(APIView):
+class AppointmentViewset(APIView):
 
     def get(self,requests):
         user = requests.user
