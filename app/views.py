@@ -44,11 +44,14 @@ class registerDoctor(APIView):
         phone_number = data['contact']
         department = data['department']  # id of department
         name = data['name']
-
+        age = data['age']
+        gender = data['gender']
         user = User.objects.create_user(username, email, password)
         user.is_doctor = True  # making this them a doctor
         user.phone_number = phone_number
         user.name = name
+        user.age=age
+        user.gender=gender
         user.save()
         departmentObj = Department.objects.get(pk=department)
         doctor = Doctor(user=user, department=departmentObj)
