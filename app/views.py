@@ -25,12 +25,12 @@ from project.settings import FCM_SERVER_KEY #firebase server key.
 
 #notification function.
 def send_notification(user,title, message):
-   try:
+#    try:
     push_service = FCMNotification(api_key=FCM_SERVER_KEY)
     fcm_token = user.token
     return push_service.notify_single_device(registration_ids=fcm_token,message_title=title,message_body=message)
-   except:
-     print('bad request')
+#    except:
+#      print('bad request')
 
 #login and register
 
