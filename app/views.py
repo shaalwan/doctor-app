@@ -24,11 +24,11 @@ from project.settings import FCM_SERVER_KEY #firebase server key.
 
 
 #notification function.
-def send_notification(user,title, message, data):
+def send_notification(user,title, message):
    try:
     push_service = FCMNotification(api_key=FCM_SERVER_KEY)
     fcm_token = user.token
-    return push_service.notify_single_device(registration_ids=fcm_token,message_title=title,message_body=message, data_message=data)
+    return push_service.notify_single_device(registration_ids=fcm_token,message_title=title,message_body=message)
    except:
      print('bad request')
 
@@ -368,7 +368,7 @@ class AskAppointment(APIView):#url yet to test
         date = requests.data['date']
         message = "{} is asking for appointment at {} on {}".format(patient.name,time,date)
         send_notification(doctor,'NewAppointment',message)
-        data = {"sender":patient,"reciever":doctor,"data":message}
+        data = {"sender":patient.id,"reciever":requests.data['doctor'],"data":message}
         serializer = NotificationSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -408,10 +408,9 @@ class Share(APIView): #url yet to test
     def post(self,requests):
         sender = requests.user
         reciever = Doctor.objects.get(pk=requests.data['doctor'])
-        patient = Patient.objects.get(requests.data['patient'])
         message = "{} shared a patient's report".format(sender.name)
         send_notification(reciever,"Patient Report Shared",message)
-        data = {"sender":sender,"reciever":reciever,"data":message}
+        data = {"sender":sender.id,"reciever":requests.data['doctor'],"data":message}
         serializer = NotificationSerializer(data=data)
         if serializer.is_valid():
             serializer.save()

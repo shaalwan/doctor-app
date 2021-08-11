@@ -101,4 +101,4 @@ class ProblemSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fileds = '__all__'
+        fields = '__all__'
