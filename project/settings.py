@@ -61,7 +61,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'project.urls'
 
-FCM_SERVER_KEY="doctor-app-cb5f3"
+FCM_SERVER_KEY="drxab-1fdea"
 
 REST_FRAMEWORK = {
     #     'DEFAULT_AUTHENTICATION_CLASSES': [
