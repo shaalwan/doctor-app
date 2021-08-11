@@ -16,6 +16,21 @@ from .models import *
 from .serializers import *
 from .paginators import *
 
+import firebase_admin
+default_app = firebase_admin.initialize_app()
+
+from pyfcm import FCMNotification #for notifications form firebase
+from project.settings import FCM_SERVER_KEY #firebase server key.
+
+
+#notification function.
+def send_notification(user,title, message, data):
+   try:
+    push_service = FCMNotification(api_key=FCM_SERVER_KEY)
+    fcm_token = user.token
+    return push_service.notify_single_device(registration_ids=fcm_token,message_title=title,message_body=message, data_message=data)
+   except:
+     print('bad request')
 
 #login and register
 
@@ -195,15 +210,15 @@ class ReportList(viewsets.ReadOnlyModelViewSet):
         return reports
 
 
-# class AppointmentList(viewsets.ReadOnlyModelViewSet):
-#     model = Appointment
-#     serializer_class = AppointmentSerializer
-#     #pagination_class = StandardResultsSetPagination
+class AppointmentList(viewsets.ReadOnlyModelViewSet):#url yet to make
+    model = Appointment
+    serializer_class = AppointmentSerializer
+    #pagination_class = StandardResultsSetPagination
 
-#     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
 
     def get_queryset(self):
-        reports = Report.objects.filter(
+        reports = Appointment.objects.filter(
             patient=self.kwargs['pk']).order_by('-date')
         return reports
 
@@ -337,8 +352,24 @@ class newPrescriptionViewset(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class AskAppointment(APIView):#url yet to test
 
-class newAppointment(APIView):
+    def post(self,requests):
+        doctor = Doctor.objects.get(pk=requests.data['doctor'])
+        patient = requests.user
+        time = requests.data['time']
+        date = requests.data['date']
+        message = "{} is asking for appointment at {} on {}".format(patient.name,time,date)
+        send_notification(doctor,'NewAppointment',message)
+        data = {"sender":patient,"reciever":doctor,"data":message}
+        serializer = NotificationSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Appointment(APIView):
 
     def get(self,requests):
         user = requests.user
@@ -366,3 +397,16 @@ class newAppointment(APIView):
         appointment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class Share(APIView): #url yet to test
+    def post(self,requests):
+        sender = requests.user
+        reciever = Doctor.objects.get(pk=requests.data['doctor'])
+        patient = Patient.objects.get(requests.data['patient'])
+        message = "{} shared a patient's report".format(sender.name)
+        send_notification(reciever,"Patient Report Shared",message)
+        data = {"sender":sender,"reciever":reciever,"data":message}
+        serializer = NotificationSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

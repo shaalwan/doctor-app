@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.fields import related
 
 
 class Hospital(models.Model):
@@ -27,6 +28,7 @@ class User(AbstractUser):
     state = models.CharField(default='punjab',max_length=450)
     is_doctor = models.BooleanField(default=False)
     is_patient = models.BooleanField(default=False)
+    token = models.TextField(null=True,blank=True)
 
 class Doctor(models.Model):
     user = models.OneToOneField(
@@ -78,4 +80,8 @@ class Appointment(models.Model):
     patient = models.ForeignKey(Patient,on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor,on_delete=models.CASCADE)
 
+class Notification(models.Model):
+    sender = models.ForeignKey(User,on_delete=models.CASCADE,related_name='sender')
+    reciever = models.ForeignKey(User,on_delete=models.CASCADE,related_name='reciever')
+    data = models.TextField()
 
