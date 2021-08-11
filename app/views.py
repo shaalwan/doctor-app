@@ -70,10 +70,14 @@ class registerPatient(APIView):
         phone_number = data['contact']
         doctor = data['doctor']  # id of doctor
         name = data['name']
+        age = data['age']
+        gender = data['gender']
         user = User.objects.create_user(username, email, password)
         user.is_patient = True
         user.phone_number = phone_number
         user.name = name
+        user.age=age
+        user.gender=gender
         user.save()
         doctorObj = Doctor.objects.get(pk=doctor)
         # problemObj = Problem.objects.get(pk=problem)
