@@ -26,6 +26,7 @@ class User(AbstractUser):
         upload_to='profile_images/', default='profile_images/default.png', null=False)
     age = models.IntegerField(default=18, null=True)
     state = models.CharField(default='punjab',max_length=450)
+    gender = models.CharField(default='male',max_length=100)
     is_doctor = models.BooleanField(default=False)
     is_patient = models.BooleanField(default=False)
     token = models.TextField(null=True,blank=True)
