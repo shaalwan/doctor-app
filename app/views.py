@@ -198,7 +198,7 @@ class patientList(viewsets.ReadOnlyModelViewSet):
     pagination_class = StandardResultsSetPagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     filterset_fields = ['problem', 'user__name']
-    search_fields = ('user__name')
+    search_fields = ('user__name',)
     def get_queryset(self):
         patients = Patient.objects.filter(doctor=Doctor.objects.get(
             user=self.request.user)).order_by('user')
