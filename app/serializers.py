@@ -98,6 +98,7 @@ class ProblemSerializer(serializers.ModelSerializer):
         model = Problem
         fields = '__all__'
 
+
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification

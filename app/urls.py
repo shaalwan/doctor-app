@@ -32,6 +32,10 @@ urlpatterns = [
     path('prescription/add',newPrescriptionViewset.as_view(),name='new-prescription'),
 
     path('getappointment',AppointmentViewset.as_view(),name='new appointment'),
+
+    #notifications
     path('askappointment',AskAppointment.as_view(),name='askappointment'),
     path('shareReport',Share.as_view(),name='shareReport'),
+    path('notifications',NotificationList.as_view({'get':'list'}),name='notifications'),
+
 ]

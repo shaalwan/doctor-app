@@ -1,4 +1,4 @@
-from django.http import response
+from django.http import request, response
 from django.http.response import Http404  # for bad request
 from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView  # view set to send data in api form
@@ -227,6 +227,13 @@ class AppointmentList(viewsets.ReadOnlyModelViewSet):#url yet to make
     def get_queryset(self):
         reports = Appointment.objects.filter(
             patient=self.kwargs['pk']).order_by('-date')
+        return reports
+
+class NotificationList(viewsets.ReadOnlyModelViewSet):#url yet to make
+    model = Notification
+    serializer_class = NotificationSerializer
+    def get_queryset(self):
+        reports = Notification.objects.filter(reciever=self.request.user)
         return reports
 
 
