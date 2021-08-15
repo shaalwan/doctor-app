@@ -197,7 +197,7 @@ class patientList(viewsets.ReadOnlyModelViewSet):
     serializer_class = PatientSerializer
     pagination_class = StandardResultsSetPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['problem','name']
+    filterset_fields = ['problem','user__name']
 
     def get_queryset(self):
         patients = Patient.objects.filter(doctor=Doctor.objects.get(
