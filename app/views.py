@@ -232,6 +232,8 @@ class AppointmentList(viewsets.ReadOnlyModelViewSet):#url yet to make
 class NotificationList(viewsets.ReadOnlyModelViewSet):#url yet to make
     model = Notification
     serializer_class = NotificationSerializer
+    pagination_class = StandardResultsSetPagination
+
     def get_queryset(self):
         reports = Notification.objects.filter(reciever=self.request.user)
         return reports
