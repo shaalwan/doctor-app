@@ -22,7 +22,6 @@ default_app = firebase_admin.initialize_app()
 from pyfcm import FCMNotification #for notifications form firebase
 from project.settings import FCM_SERVER_KEY #firebase server key.
 
-
 #notification function.
 def send_notification(reciver,title, message):
 #    try:
@@ -33,6 +32,7 @@ def send_notification(reciver,title, message):
 #      print('bad request')
 
 #login and register
+
 
 class registerDoctor(APIView):
 
@@ -197,7 +197,7 @@ class patientList(viewsets.ReadOnlyModelViewSet):
     serializer_class = PatientSerializer
     pagination_class = StandardResultsSetPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['problem']
+    filterset_fields = ['problem','name']
 
     def get_queryset(self):
         patients = Patient.objects.filter(doctor=Doctor.objects.get(
