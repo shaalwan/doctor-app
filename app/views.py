@@ -229,6 +229,7 @@ class AppointmentList(viewsets.ReadOnlyModelViewSet):#url yet to make
             patient=self.kwargs['pk']).order_by('-date')
         return reports
 
+
 class NotificationList(viewsets.ReadOnlyModelViewSet):#url yet to make
     model = Notification
     serializer_class = NotificationSerializer
@@ -237,7 +238,6 @@ class NotificationList(viewsets.ReadOnlyModelViewSet):#url yet to make
     def get_queryset(self):
         reports = Notification.objects.filter(reciever=self.request.user)
         return reports
-
 
 
 class PrescriptionList(viewsets.ReadOnlyModelViewSet):
@@ -401,6 +401,8 @@ class AppointmentViewset(APIView):
         date = requests.data['date']
         patient = requests.data['patient']
         doctor = requests.user
+        message = "you have appointment with {} on {}".format(doctor,date)
+        send_notification(patient,'Appointment',message)
         data = {"date": date, "patient": patient, "doctor": doctor}
         serializer = AppointmentSerializer(data=data)
         if serializer.is_valid():
@@ -414,6 +416,7 @@ class AppointmentViewset(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class Share(APIView): #url yet to test
+
     def post(self,requests):
         sender = requests.user
         reciever = Doctor.objects.get(pk=requests.data['doctor'])
@@ -425,3 +428,19 @@ class Share(APIView): #url yet to test
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DenyAppointment(APIView):
+    def post(self,requests):
+        sender = requests.user
+        reciver = requests.data['patient']
+        message = 'your appointment request has been denied'
+        data = {"sender":sender.id,"reciever":requests.data['doctor'],"data":message}
+        send_notification(reciver,'Appointment Request Denied',message)
+        serializer = NotificationSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+

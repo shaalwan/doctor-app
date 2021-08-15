@@ -37,5 +37,6 @@ urlpatterns = [
     path('askappointment',AskAppointment.as_view(),name='askappointment'),
     path('shareReport',Share.as_view(),name='shareReport'),
     path('notifications',NotificationList.as_view({'get':'list'}),name='notifications'),
+    path('denyrequest',DenyAppointment.as_view(),name='deny request'),#test
 
 ]
