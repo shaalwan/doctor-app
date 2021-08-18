@@ -402,7 +402,7 @@ class AppointmentViewset(APIView):
         patient = requests.data['patient']
         doctor = requests.user
         message = "you have appointment with {} on {}".format(doctor,date)
-        send_notification(patient,'Appointment',message)
+        send_notification(Patient.objects.get(pk=patient),'Appointment',message)
         data = {"date": date, "patient": patient, "doctor": doctor}
         serializer = AppointmentSerializer(data=data)
         if serializer.is_valid():
