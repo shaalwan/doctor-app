@@ -88,6 +88,7 @@ class Registerp(APIView):
         data = requests.data 
         user = data['user']
         doctor = data['doctor'] 
+        user = User.objects.get(pk=user)
         doctorObj = Doctor.objects.get(pk=doctor)
         patient = Patient(user=user, doctor=doctorObj)
         patient.save()
