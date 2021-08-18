@@ -41,20 +41,20 @@ class registerDoctor(APIView):
         username = data['username']
         email = data['email']
         password = data['password']
-        phone_number = data['contact']
-        department = data['department']  # id of department
-        name = data['name']
-        age = data['age']
-        gender = data['gender']
+        # phone_number = data['contact']
+        # department = data['department']  # id of department
+        # name = data['name']
+        # age = data['age']
+        # gender = data['gender']
         user = User.objects.create_user(username, email, password)
         user.is_doctor = True  # making this them a doctor
-        user.phone_number = phone_number
-        user.name = name
-        user.age=age
-        user.gender=gender
+        # user.phone_number = phone_number
+        # user.name = name
+        # user.age=age
+        # user.gender=gender
         user.save()
-        departmentObj = Department.objects.get(pk=department)
-        doctor = Doctor(user=user, department=departmentObj)
+        # departmentObj = Department.objects.get(pk=department)
+        doctor = Doctor(user=user)
         doctor.save()
         serializer = UserSerializer(user)
         return Response(serializer.data)
@@ -67,22 +67,22 @@ class registerPatient(APIView):
         username = data['username']
         email = data['email']
         password = data['password']
-        phone_number = data['contact']
-        doctor = data['doctor']  # id of doctor
-        name = data['name']
-        age = data['age']
-        gender = data['gender']
+        # phone_number = data['contact']
+        # doctor = data['doctor']  # id of doctor
+        # name = data['name']
+        # age = data['age']
+        # gender = data['gender']
         user = User.objects.create_user(username, email, password)
         user.is_patient = True
-        user.phone_number = phone_number
-        user.name = name
-        user.age=age
-        user.gender=gender
+        # user.phone_number = phone_number
+        # user.name = name
+        # user.age=age
+        # user.gender=gender
         user.save()
-        doctorObj = Doctor.objects.get(pk=doctor)
+        # doctorObj = Doctor.objects.get(pk=doctor)
         # problemObj = Problem.objects.get(pk=problem)
-        patient = Patient(user=user, doctor=doctorObj)
-        patient.save()
+        # patient = Patient(user=user, doctor=doctorObj)
+        # patient.save()
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
@@ -233,7 +233,7 @@ class AppointmentList(viewsets.ReadOnlyModelViewSet):#url yet to make
 class NotificationList(viewsets.ReadOnlyModelViewSet):#url yet to make
     model = Notification
     serializer_class = NotificationSerializer
-    pagination_class = StandardResultsSetPagination
+    # pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         reports = Notification.objects.filter(reciever=self.request.user)
