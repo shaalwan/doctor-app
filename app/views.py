@@ -85,7 +85,7 @@ class registerPatient(APIView):
 
 class Registerp(APIView):
     def post(self,requests):
-        data = request.data 
+        data = requests.data 
         user = data['user']
         doctor = data['doctor'] 
         doctorObj = Doctor.objects.get(pk=doctor)
