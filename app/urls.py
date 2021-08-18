@@ -6,6 +6,7 @@ urlpatterns = [
     #register and login
     path('register/doctor', registerDoctor.as_view(), name='doctor-signup'),
     path('register/patient', registerPatient.as_view(), name='patient-signup'),
+    path('registerp',Registerp.as_view(),name='patient-register'),
     path('login', login.as_view(), name='login'),
 
 
