@@ -53,7 +53,7 @@ class registerDoctor(APIView):
         # user.age=age
         # user.gender=gender
         user.save()
-        # departmentObj = Department.objects.get(pk=department)
+        departmentObj = Department.objects.get(pk=1)
         doctor = Doctor(user=user)
         doctor.save()
         serializer = UserSerializer(user)
