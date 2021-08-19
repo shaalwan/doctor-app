@@ -21,14 +21,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'name', 'password', 'age', 'state',
+        fields = ['id', 'username', 'name', 'password', 'age', 'state','gender',
                   'image', 'email','address', 'phone_number', 'is_doctor', 'is_patient']
 
 
 class AddUser(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'name', 'age','state', 'image', 'phone_number', 'email',
+        fields = ['id', 'username', 'name', 'age','state','gender', 'image', 'phone_number', 'email',
                   'address', 'token']
 
 
