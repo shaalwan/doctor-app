@@ -446,7 +446,7 @@ class DenyAppointment(APIView):
         sender = requests.user
         reciver = requests.data['patient']
         message = 'your appointment request has been denied'
-        data = {"sender":sender.id,"reciever":requests.data['doctor'],"data":message}
+        data = {"sender":sender.id,"reciever":requests.data['patient'],"data":message}
         send_notification(reciver,'Appointment Request Denied',message)
         serializer = NotificationSerializer(data=data)
         if serializer.is_valid():
