@@ -24,10 +24,12 @@ from project.settings import FCM_SERVER_KEY #firebase server key.
 
 #notification function.
 def send_notification(reciver,title, message):
+ try:
     push_service = FCMNotification(api_key='AAAAwByJoGk:APA91bEM1KamwL3okBzAdngvpCZ8m56aFXNW8LSJl1U1Vdg8_ad41CMZk8XyyXUfHpSJvInXO4zY5hnEg2BWWb44QUwC_nNtX-zmGvUB7TSU2D7t8NrofK75Z9hDpFhlXa0Dc5XE4jta')
     fcm_token = reciver.user.token
     return push_service.notify_single_device(registration_id=fcm_token,message_title=title,message_body=message)
-
+ except:
+     print("no token")
 #login and register
 
 
@@ -88,9 +90,9 @@ class Registerp(APIView):
         data = requests.data 
         user = data['user']
         doctor = data['doctor'] 
-        user = User.objects.get(pk=user)
+        userobj = User.objects.get(pk=user)
         doctorObj = Doctor.objects.get(pk=doctor)
-        patient = Patient(user=user, doctor=doctorObj)
+        patient = Patient(user=userobj, doctor=doctorObj)
         patient.save()
         serializer = PatientSerializer(patient)
         return Response(serializer.data)
@@ -389,7 +391,9 @@ class AskAppointment(APIView):#url yet to test
         serializer = NotificationSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            s =serializer.data
+            s['date'] = date
+            return Response(s, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
