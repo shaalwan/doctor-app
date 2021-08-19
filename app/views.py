@@ -392,7 +392,7 @@ class AskAppointment(APIView):#url yet to test
         if serializer.is_valid():
             serializer.save()
             s =serializer.data
-            s['date'] = date
+            s['appointment-date'] = date
             return Response(s, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
