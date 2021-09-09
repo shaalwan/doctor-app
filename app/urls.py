@@ -23,6 +23,7 @@ urlpatterns = [
     path('reports/<int:pk>',ReportList.as_view({'get':'list'}),name = 'report-list'),
     path('prescriptions/<int:pk>',PrescriptionList.as_view({'get':'list'}), name='prescription-list'),
     path('xrays/<int:pk>',XrayList.as_view({'get':'list'}),name = 'xray-list'),
+    path('appointments/<int:pk>',AppointmentList.as_view({'get':'list'}),name = 'Appointment-list'),
 
     path('report/<int:pk>',ReportViewset.as_view(),name='patient-report'),
     path('xray/<int:pk>',XrayViewset.as_view(),name = 'patient-xray'),

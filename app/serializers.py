@@ -90,7 +90,7 @@ class addXray(serializers.ModelSerializer):
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        fields = '__all__'
+        fields = ['date','patient','doctor']
 
 
 class ProblemSerializer(serializers.ModelSerializer):

@@ -85,6 +85,7 @@ class registerPatient(APIView):
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
+
 class Registerp(APIView):
     def post(self,requests):
         data = requests.data 
@@ -96,6 +97,7 @@ class Registerp(APIView):
         patient.save()
         serializer = PatientSerializer(patient)
         return Response(serializer.data)
+
 
 class login(APIView):
 
@@ -378,6 +380,7 @@ class newPrescriptionViewset(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class AskAppointment(APIView):#url yet to test
 
     def post(self,requests):
@@ -427,6 +430,7 @@ class AppointmentViewset(APIView):
         appointment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class Share(APIView): #url yet to test
 
     def post(self,requests):
@@ -440,6 +444,7 @@ class Share(APIView): #url yet to test
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class DenyAppointment(APIView):
     def post(self,requests):
