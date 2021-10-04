@@ -411,7 +411,6 @@ class AppointmentViewset(APIView):
         serializer = AppointmentSerializer(appoints,many=True)
         return Response(serializer.data)
 
-
     def post(self, requests):
         date = requests.data['date']
         patient = requests.data['patient']
@@ -427,9 +426,10 @@ class AppointmentViewset(APIView):
 
     def delete(self, requests):
         appointment = Appointment.objects.get(pk=requests.data['id'])
-        appointment.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
+        appointment.status = 1
+        appointment.save()
+        serializer = AppointmentSerializer(appointment)
+        return Response(serializer.data)
 
 class Share(APIView): #url yet to test
 

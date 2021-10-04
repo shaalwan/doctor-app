@@ -80,6 +80,8 @@ class Appointment(models.Model):
     date = models.DateField(blank=True)
     patient = models.ForeignKey(Patient,on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor,on_delete=models.CASCADE)
+    status = models.IntegerField(default=0)
+    #confirmed = 0 , cancled = 1, denied = 2 
 
 class Notification(models.Model):
     sender = models.ForeignKey(User,on_delete=models.CASCADE,related_name='sender')
