@@ -405,9 +405,9 @@ class AppointmentViewset(APIView):
     def get(self,requests):
         user = requests.user
         if user.is_doctor:
-            appoints = Appointment.objects.filter(doctor=user.id)
+            appoints = Appointment.objects.filter(doctor=user.id,status=0)
         else:
-            appoints = Appointment.objects.filter(patient=user.id)
+            appoints = Appointment.objects.filter(patient=user.id,status=0)
         serializer = AppointmentSerializer(appoints,many=True)
         return Response(serializer.data)
 
