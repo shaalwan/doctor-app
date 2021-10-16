@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.fields import related
-
+from datetime import datetime as dt
 
 class Hospital(models.Model):
     name = models.CharField(max_length=500, default='')
@@ -78,6 +78,7 @@ class Xray(models.Model):
 
 class Appointment(models.Model):
     date = models.DateField(blank=True)
+    time = models.TimeField(default = dt.now)
     patient = models.ForeignKey(Patient,on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor,on_delete=models.CASCADE)
     status = models.IntegerField(default=0)
@@ -87,8 +88,10 @@ class Notification(models.Model):
     sender = models.ForeignKey(User,on_delete=models.CASCADE,related_name='sender')
     reciever = models.ForeignKey(User,on_delete=models.CASCADE,related_name='reciever')
     data = models.TextField()
-    icon = models.IntegerField(default=1)# 1:askappointment 2:share 3:others
-    status = models.IntegerField(default=0)# 1:seen 2:notseen
+    time = models.DateTimeField(auto_now=True)
+    icon = models.IntegerField(default=1)# 1:askappointment 2:share 3:deny 4:accept
+    status = models.IntegerField(default=0)# 1:seen 0:notseen
     
+
 
 
