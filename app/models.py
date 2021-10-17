@@ -88,7 +88,7 @@ class Notification(models.Model):
     sender = models.ForeignKey(User,on_delete=models.CASCADE,related_name='sender')
     reciever = models.ForeignKey(User,on_delete=models.CASCADE,related_name='reciever')
     data = models.TextField()
-    time = models.TimeField(auto_now=True,blank=True)
+    time = models.DateTimeField(auto_now=True)
     icon = models.IntegerField(default=1)# 1:askappointment 2:share 3:deny 4:accept
     status = models.IntegerField(default=0)# 1:seen 0:notseen
     
