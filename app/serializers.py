@@ -1,3 +1,4 @@
+#serializer
 from django.db.models import fields
 from django.db.models.fields.files import ImageField
 from django.db.models.query import prefetch_related_objects
@@ -90,7 +91,7 @@ class addXray(serializers.ModelSerializer):
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        fields = ['id','date','patient','doctor']
+        fields = ['id','date','time','patient','doctor']
 
 
 class ProblemSerializer(serializers.ModelSerializer):
@@ -103,3 +104,5 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = '__all__'
+
+
