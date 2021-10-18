@@ -79,6 +79,7 @@ class Xray(models.Model):
 
 class Appointment(models.Model):
     date = models.DateField(blank=True)
+    time = models.TimeField(default=dt.now())
     patient = models.ForeignKey(Patient,on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor,on_delete=models.CASCADE)
     status = models.IntegerField(default=0)
