@@ -401,7 +401,7 @@ class AppointmentViewset(APIView):
         time = requests.data['time']
         doctor = requests.user
         
-        message = "you have appointment with {} on {}".format(doctor,date)
+        message = "you have appointment with {} on {} at {}".format(doctor,date,time)
         send_notification(Patient.objects.get(pk=patient),'Appointment',message)
         
         notifdata = {"sender":doctor.id,"reciever":patient,"data":message,"icon":4}
@@ -409,7 +409,7 @@ class AppointmentViewset(APIView):
         if NotifiSerializer.is_valid():
             NotifiSerializer.save()
         
-        data = {"date": date,"time":time, "patient": patient, "doctor": doctor}
+        data = {"date": date, "patient": patient, "doctor": doctor}
         serializer = AppointmentSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -426,15 +426,6 @@ class AppointmentViewset(APIView):
 
 
 class AskAppointment(APIView):
-    def get(self,requests):
-        user = requests.user
-        if user.is_doctor:
-            appoints = Appointment.objects.filter(doctor=user.id,status=0)
-        else:
-            appoints = Appointment.objects.filter(patient=user.id,status=0)
-        serializer = AppointmentSerializer(appoints,many=True)
-        return Response(serializer.data)
-
     def post(self,requests):
         doctor = Doctor.objects.get(pk=requests.data['doctor'])
         patient = requests.user
@@ -451,12 +442,6 @@ class AskAppointment(APIView):
             return Response(s, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, requests):
-        appointment = Appointment.objects.get(pk=requests.data['id'])
-        appointment.status = 1
-        appointment.save()
-        serializer = AppointmentSerializer(appointment)
-        return Response(serializer.data)
 
 
 class DenyAppointment(APIView):
