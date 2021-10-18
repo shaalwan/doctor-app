@@ -1,4 +1,3 @@
-#views
 from django.http import request, response
 from django.http.response import Http404  # for bad request
 from django.shortcuts import get_object_or_404, render
@@ -31,8 +30,6 @@ def send_notification(reciver,title, message):
     return push_service.notify_single_device(registration_id=fcm_token,message_title=title,message_body=message)
  except:
      print("no token")
-
-
 #login and register
 
 
@@ -384,48 +381,8 @@ class newPrescriptionViewset(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class AppointmentViewset(APIView):
+class AskAppointment(APIView):#url yet to test
 
-    def get(self,requests):
-        user = requests.user
-        if user.is_doctor:
-            appoints = Appointment.objects.filter(doctor=user.id,status=0)
-        else:
-            appoints = Appointment.objects.filter(patient=user.id,status=0)
-        serializer = AppointmentSerializer(appoints,many=True)
-        return Response(serializer.data)
-
-    def post(self, requests):
-        date = requests.data['date']
-        patient = requests.data['patient']
-        time = requests.data['time']
-        doctor = requests.user
-        
-        message = "you have appointment with {} on {} at {}".format(doctor,date,time)
-        send_notification(Patient.objects.get(pk=patient),'Appointment',message)
-        
-        notifdata = {"sender":doctor.id,"reciever":patient,"data":message,"icon":4}
-        NotifiSerializer = NotificationSerializer(data=notifdata)
-        if NotifiSerializer.is_valid():
-            NotifiSerializer.save()
-        
-        data = {"date": date, "patient": patient, "doctor": doctor}
-        serializer = AppointmentSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-            # return Response({"notification":NotifiSerializer.data,"appointment":serializer.data}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def put(self, requests):
-        appointment = Appointment.objects.get(pk=requests.data['id'])
-        appointment.status = 1
-        appointment.save()
-        serializer = AppointmentSerializer(appointment)
-        return Response(serializer.data)
-
-
-class AskAppointment(APIView):
     def post(self,requests):
         doctor = Doctor.objects.get(pk=requests.data['doctor'])
         patient = requests.user
@@ -443,29 +400,45 @@ class AskAppointment(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class AppointmentViewset(APIView):
 
-class DenyAppointment(APIView):
-    def post(self,requests):
-        sender = requests.user
-        reciver = requests.data['patient']
-        message = 'your appointment request has been denied'
-        data = {"sender":sender.id,"reciever":requests.data['patient'],"data":message,"icon":3}
-        send_notification(reciver,'Appointment Request Denied',message)
-        serializer = NotificationSerializer(data=data)
+    def get(self,requests):
+        user = requests.user
+        if user.is_doctor:
+            appoints = Appointment.objects.filter(doctor=user.id)
+        else:
+            appoints = Appointment.objects.filter(patient=user.id)
+        serializer = AppointmentSerializer(appoints,many=True)
+        return Response(serializer.data)
+
+
+    def post(self, requests):
+        date = requests.data['date']
+        patient = requests.data['patient']
+        doctor = requests.user
+        message = "you have appointment with {} on {}".format(doctor,date)
+        send_notification(Patient.objects.get(pk=patient),'Appointment',message)
+        data = {"date": date, "patient": patient, "doctor": doctor}
+        serializer = AppointmentSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, requests):
+        appointment = Appointment.objects.get(pk=requests.data['id'])
+        appointment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
-class Share(APIView):
+
+class Share(APIView): #url yet to test
 
     def post(self,requests):
         sender = requests.user
         reciever = Doctor.objects.get(pk=requests.data['doctor'])
         message = "{} shared a patient's report".format(sender.name)
         send_notification(reciever,"Patient Report Shared",message)
-        data = {"sender":sender.id,"reciever":requests.data['doctor'],"data":message,"icon":2}
+        data = {"sender":sender.id,"reciever":requests.data['doctor'],"data":message}
         serializer = NotificationSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -473,36 +446,18 @@ class Share(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class NotificationViewset(APIView):
-    def get_object(self, pk):
-        try:
-            return Notification.objects.get(pk=pk)
-        except Report.DoesNotExist():
-            raise Http404
-
-    def get(self, requests, pk):
-        notif = self.get_object(pk)
-        serializer = NotificationSerializer(notif)
-        return Response(serializer.data)
-
-    def put(self, requests, pk):
-        notif = self.get_object(pk)
-        serializer = NotificationSerializer(notif, data=requests.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class newProblem(APIView):
-    def post(self, requests):
-        serializer = ProblemSerializer(data=requests.data)
+class DenyAppointment(APIView):
+    def post(self,requests):
+        sender = requests.user
+        reciver = requests.data['patient']
+        message = 'your appointment request has been denied'
+        data = {"sender":sender.id,"reciever":requests.data['patient'],"data":message}
+        send_notification(reciver,'Appointment Request Denied',message)
+        serializer = NotificationSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
+        
 
 

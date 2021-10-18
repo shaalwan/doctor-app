@@ -1,4 +1,3 @@
-#urls
 from django.urls import path
 
 from .views import *
@@ -40,8 +39,6 @@ urlpatterns = [
     path('askappointment',AskAppointment.as_view(),name='askappointment'),
     path('shareReport',Share.as_view(),name='shareReport'),
     path('notifications',NotificationList.as_view({'get':'list'}),name='notifications'),
-    path('denyrequest',DenyAppointment.as_view(),name='deny request'),
+    path('denyrequest',DenyAppointment.as_view(),name='deny request'),#test
 
-    path('problem/add',newProblem.as_view(),name='add problem'),#test
-    path('notification/<int:pk>',NotificationViewset.as_view(),name='notification get,edit'),
 ]
