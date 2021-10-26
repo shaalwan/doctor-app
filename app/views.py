@@ -95,7 +95,8 @@ class Registerp(APIView):
         problem = data['problem']
         userobj = User.objects.get(pk=user)
         doctorObj = Doctor.objects.get(pk=doctor)
-        patient = Patient(user=userobj, doctor=doctorObj,problem = problem)
+        problemObj = Problem.objects.get(pk=problem)
+        patient = Patient(user=userobj, doctor=doctorObj,problem = problemObj)
         patient.save()
         serializer = PatientSerializer(patient)
         return Response(serializer.data)
