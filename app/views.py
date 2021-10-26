@@ -34,8 +34,6 @@ def send_notification(reciver,title, message):
 
 
 #login and register
-
-
 class registerDoctor(APIView):
 
     def post(self, request, format=None):
@@ -94,9 +92,10 @@ class Registerp(APIView):
         data = requests.data 
         user = data['user']
         doctor = data['doctor'] 
+        problem = data['problem']
         userobj = User.objects.get(pk=user)
         doctorObj = Doctor.objects.get(pk=doctor)
-        patient = Patient(user=userobj, doctor=doctorObj)
+        patient = Patient(user=userobj, doctor=doctorObj,problem = problem)
         patient.save()
         serializer = PatientSerializer(patient)
         return Response(serializer.data)
@@ -115,8 +114,6 @@ class login(APIView):
         return Response({"Error": "invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 # user view,edit,delete
-
-
 class doctorViewset(APIView):
 
     def get_object(self, pk):
@@ -441,7 +438,6 @@ class AskAppointment(APIView):
             s['appointment-date'] = date
             return Response(s, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class DenyAppointment(APIView):
